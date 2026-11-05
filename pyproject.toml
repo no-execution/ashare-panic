@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ashare-panic"
+version = "0.1.0"
+description = "Standalone A-share market stress monitor with local historical data bootstrap"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "pandas>=2.0", "requests>=2.31", "plotly>=5.9", "baostock>=0.9.4", "tzdata>=2024.1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+ashare-panic = "trade.qvix.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["trade", "trade.qvix"]
+
+[tool.setuptools.package-data]
+"trade.qvix" = ["*.js", "*.css", "*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["trade/qvix/tests"]
+pythonpath = ["."]

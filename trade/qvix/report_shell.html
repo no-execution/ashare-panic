@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场压力观察 · A股复盘</title><style>$css</style></head><body>
+<header class="topbar"><a class="brand" href="#"><span class="brand-icon">M</span> MARKET LENS <em>市场压力观察</em></a>
+<nav><a href="#workspace">行情复盘</a><a href="#history">历史事件</a><a href="#data-status">数据状态</a></nav></header>
+<main>
+<section class="intro"><div><div class="eyebrow">A-SHARE / RISK OBSERVATORY</div><h1>把恐慌，放回历史中看。</h1>
+<p>指数、市场广度与隐含波动率，同一条时间轴。历史覆盖 $first — $last。</p></div>
+<div class="updated">报告生成于 $generated<br><a href="daily.csv" download>下载完整日级数据 ↗</a></div></section>
+<section class="overview">
+<article class="metric primary"><span>综合压力 <i>$score_kind</i></span><div><strong>$combined</strong><small>/ 100</small></div><footer>短期与长期取较高值 · $score_time</footer></article>
+<article class="metric"><span>短期恐慌 · 原模型不变</span><div><strong>$score</strong><small>/ 100</small></div><footer>$status · 有效股票 $count 只</footer></article>
+<article class="metric"><span>长期损伤 · damage-v1</span><div><strong>$long_score</strong><small>/ 100</small></div><footer>$long_kind · 高压不等于见底</footer></article>
+</section>
+<section class="workspace" id="workspace">
+<div class="section-title"><div><span class="eyebrow">01 / TIMELINE</span><h2>同日对照 · 历史复盘</h2></div><span class="pill">日级历史 + 独立盘中快照</span></div>
+<div class="toolbar">
+<div class="button-group" id="presets"><button data-range="1m">近1月</button><button data-range="3m">近3月</button><button data-range="1y">近1年</button><button data-range="3y">近3年</button><button data-range="2020" class="active">2020 至今</button><button data-range="all">全部</button></div>
+<div class="date-group"><label>从 <input id="date-start" type="date" aria-label="起始日期"></label><label>至 <input id="date-end" type="date" aria-label="结束日期"></label><button id="apply-dates">应用</button></div>
+</div>
+<div class="toolbar secondary"><div class="button-group"><label>指数 <select id="index-select" aria-label="选择指数"></select></label><button id="zoom-in" title="以当前区间中心放大">＋ 放大</button><button id="zoom-out">－ 缩小</button><button id="pan-left" title="向前移动半个窗口">← 前移</button><button id="pan-right" title="向后移动半个窗口">后移 →</button><button id="reset-view">重置视图</button></div>
+<div class="button-group"><button id="drag-pan" class="active">拖动平移</button><button id="drag-zoom">框选放大</button><label><input type="checkbox" id="wheel-zoom"> 滚轮缩放</label><button id="save-image">导出图表</button></div></div>
+<p class="chart-hint" id="range-status" role="status">拖动图表平移，框选局部放大；底部滑块可调整整个时间窗口。双击图表恢复。</p>
+<p class="chart-hint">连线说明：短缺数段（≤5个交易日）以细点线跨接，非插值，悬停仍显示缺失；末端虚线连接最新采样 ◆。RPS 未更新不向后延伸，长期缺数仍留空。</p>
+<div class="chart"><div class="cursor-readout"><div class="readout-head"><time>移入任一图层，查看具体日期</time><button id="pin-date">固定读数</button></div><div class="cursor-values"></div></div>
+<div class="plot-host">$plot<div class="pressure-tools" id="pressure-tools">
+<div class="pressure-heading"><strong>市场压力 <time id="pressure-date"></time></strong><div class="button-group" id="pressure-modes" aria-label="压力副图显示模式"><button data-mode="compare" class="active" aria-pressed="true">短长对照</button><button data-mode="short" aria-pressed="false">只看短期</button><button data-mode="long" aria-pressed="false">只看长期</button><button data-mode="combined" aria-pressed="false">只看综合</button></div></div>
+<div class="pressure-values"><span class="pressure-chip short"><i></i>短期恐慌 <b id="pressure-short">—</b></span><span class="pressure-chip long"><i></i>长期损伤 <b id="pressure-long">—</b></span><span class="pressure-chip combined"><i></i>综合压力 <b id="pressure-combined">—</b></span><small id="pressure-hint">综合默认不叠画 · 高压85 / 低压15 · ▲短期触发</small></div>
+</div><div class="pressure-tools heat-tools" id="heat-tools"><div class="pressure-heading"><strong><span id="heat-title">指数过热度</span> <time id="heat-date"></time></strong><span class="muted">跟随上方指数选择 · 非卖出信号</span></div><div class="pressure-values"><span class="heat-main">过热度 <b id="heat-score">—</b></span><span>趋势偏离 <b id="heat-extension">—</b></span><span>上涨速度 <b id="heat-momentum">—</b></span><small>两维度等权 · 80/90参考线未经择时验证</small></div></div>
+<div class="pressure-tools rps-tools" id="rps-tools"><div class="pressure-heading"><strong>RPS 强势股占比 <time id="rps-date"></time></strong><span id="rps-risk" class="rps-risk" role="status">待更新 · 无法判断</span><span class="muted" id="rps-latest">仅盘后更新</span></div><div class="pressure-values"><span class="rps-main">符合条件 <b id="rps-selected">—</b></span><span id="rps-context"></span></div><div class="rps-legend"><span class="rps-selected-line">━ 符合条件占比</span><span class="rps-candidate-line">┄ 候选占比</span><span class="rps-ma5-line">┄ 5日均线</span><span class="rps-ma20-line">┄ 20日均线</span></div></div></div></div>
+<section class="factor-section"><div class="section-title"><h3>五因子拆解 <span id="factor-date"></span></h3><span class="muted">五项历史分位等权平均</span></div><div id="factors" class="factor-grid"></div><p class="chart-hint" id="factor-context"></p></section>
+<section class="factor-section"><div class="section-title"><h3>长期损伤拆解</h3><span class="muted">与上方同日 · 三项固定刻度等权平均，不是历史分位</span></div><div id="damage-factors" class="factor-grid damage-grid"></div><p class="chart-hint" id="damage-context"></p></section>
+<section class="factor-section"><div class="section-title"><h3>指数过热度拆解 <span id="heat-factor-date"></span></h3><a href="index-heat.csv" download>下载指数过热历史 ↗</a></div><div id="heat-factors" class="factor-grid heat-grid"></div><p class="chart-hint">趋势偏离＝20/60日乖离热度均值；上涨速度＝5/20日涨幅热度均值；两个维度各占50%。各项取此前756交易日历史分位，至少252个有效样本；原值≤0时热度分项记0，历史不足留空。均线要求窗口内完整收盘价。分数不是顶部概率，未加入成交热度或广度背离。</p></section>
+</section>
+<section class="panel rps-note"><div class="section-title"><h3>RPS 占比与家数 · plot_rps_history.py</h3><a href="rps-breadth.csv" download>下载占比、家数与均线 ↗</a></div><p id="rps-method"></p><p id="rps-source" class="muted"></p><p class="muted">占比＝符合条件家数÷当日RPS股票池家数×100%，不是全市场股票数。5/20日均线按原脚本取最近5/20条RPS日级记录的占比均值，样本不足留空。全样本均值为事后参考，不是当时可知的交易信号。指数对照复用上方主图，不重复叠加原脚本的指数面板和相关系数。</p><p class="muted">不计入恐慌或过热评分。价格部分缺失时，占比及家数仅为已确认下限；股票池为空或候选价格全部缺失时，副图留空而非显示0。历史补录仅供复盘，不代表当时盘中已知。</p><p class="muted">补好底层 RPS 和日线后：<code>python -m trade.qvix report --refresh-rps</code>；只更新了同口径家数 CSV：<code>python -m trade.qvix report</code>。完成后重新加载页面。普通盘中刷新只读取统计，不重算 RPS。</p></section>
+<section class="panel"><div class="section-title"><h3>RPS 高位阈值依据 · 非择时回测</h3><a href="rps-risk.json" download>下载阈值比较 ↗</a></div><p id="rps-risk-summary" class="muted"></p></section>
+<section id="history" class="history"><div class="section-title"><div><span class="eyebrow">02 / MARKET MEMORY</span><h2>急跌与慢熊，分开复盘</h2></div><span class="muted">统计仅使用日级数据</span></div>
+<div class="review-columns"><article class="panel"><h3>年度概览</h3><p class="muted">短期均值/峰值保留原模型；点击年份或峰值日期定位。</p><div class="table-scroll"><table><thead><tr><th>年份</th><th>短期有效/交易日</th><th>短期均值</th><th>短期≥85</th><th>原触发</th><th>长期≥85</th><th>综合≥85</th><th>短期峰值 / 日期</th></tr></thead><tbody id="year-rows"></tbody></table></div></article>
+<article class="panel"><div class="section-title"><h3>压力事件</h3><select id="event-kind" aria-label="选择事件类型"><option value="short">原短期触发</option><option value="long">长期损伤 ≥85</option><option value="combined">综合压力 ≥85</option></select><select id="event-year" aria-label="筛选事件年份"><option value="all">所有年份</option></select></div><p class="muted">连续触发的交易日合并为一段，点击查看峰值日前后。缺失日会断开事件。</p><div class="event-list" id="event-list"></div></article></div></section>
+<section class="panel"><div class="section-title"><h3>历史节点诊断 · 不是底部命中率</h3><a href="damage-validation.json" download>下载完整诊断 ↗</a></div><p id="validation-summary" class="muted"></p><div class="table-scroll"><table><thead><tr><th>日期</th><th>观察场景</th><th>原短期</th><th>长期损伤</th><th>综合压力</th></tr></thead><tbody id="case-rows"></tbody></table></div><p class="muted">案例为事后选取；没有独立底部标签和样本外检验。长期高分可能提前数月出现并继续下跌。完整诊断包含加权融合对照、阈值敏感性及下一交易日开盘起60日价格观察。</p></section>
+<details class="panel" id="quotes"><summary>盘中与最近收盘数据明细</summary>$live<h2>最近日级数据 · $last</h2><div class="cards">$cards</div></details>
+<section id="data-status" class="panel"><div class="section-title"><h3>数据覆盖与更新</h3><span class="pill">缺失数据保留为空</span></div><p id="score-coverage"></p><div id="coverage" class="coverage-grid"></div>
+<details><summary>刷新方式与计算口径</summary><p>更新盘中行情和报告：<code>python -m trade.qvix snapshot</code>；仅快速更新全市场评分：<code>python -m trade.qvix snapshot --panic-only</code>。更新后重新加载本页面。</p>
+<p>补齐本地历史与公开指数：<code>python -m trade.qvix sync</code>；只重建报告：<code>python -m trade.qvix report</code>。首次构建历史缓存较慢，同一交易日重复采样会复用缓存；股票、权息或收盘文件变化后自动失效。</p>
+<p>恐慌评分使用此前 $window 个交易日、至少 $minimum 个有效样本。原短期触发：评分 ≥85，且跌幅 ≥5% 的股票占比 ≥15% 或篮子五日损失 ≥8%。QVIX一年/三年分位分别要求202/605个有效样本，排除当天；不填补缺失，不跨口径拼接自算IV30。</p>
+<p>长期损伤：个股距近252交易日收盘高点的回撤中位数（5%→35%）、回撤≥30%的个股占比（10%→70%）、最近60日低于MA60比例的均值（35%→85%），分别线性映射到0—100并截断，三项等权。固定刻度未经收益寻优。个股至少252根历史价格、252日内至少202个收盘价；当日有效股票至少1000只、覆盖率至少85%，持续项需60日内至少48日。首次补算：<code>python -m trade.qvix damage-backfill</code>。</p>
+<p>综合压力取短期和长期较大值，任一缺失则综合缺失；这是两类压力的并集，不是重新校准的概率。长期高压线85不附加原短期冲击条件。252日高点仍会滚出窗口，不能完整衡量跨多年、板块集中或个体账户损伤。</p><p>盘中估算与历史收盘口径不同；评分不是触底概率。权息完整性与历史退市覆盖尚未验证。历史事件为现有数据复盘，不是严格的当时可知回测。</p></details>
+<details><summary>最新同步记录与源异常</summary>$details</details></section>
+<footer class="page-footer">MARKET LENS <span>本地研究报告 · 数据更新以报价时间为准</span></footer>
+</main><script type="application/json" id="review-data">$payload</script>
+</body></html>

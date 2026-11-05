@@ -1,0 +1,25 @@
+/* Night theme. Layout and responsive behavior stay in report.css. */
+:root{color-scheme:dark;--ink:#edf4ff;--muted:#b4c4d8;--blue:#91c5ff;--line:#33465e;--bg:#080f19;--surface:#101925;--raised:#192638}
+body{background:var(--bg);color:var(--ink)}
+button,select,input[type=date]{background:var(--raised);border-color:#45607e;color:var(--ink)}
+button:hover{background:#263b55;border-color:#91c5ff}button.active{background:#223e60;color:#f0f7ff;border-color:#8bbfff}
+.topbar,.metric,.workspace,.panel,.pressure-tools,.table-scroll th{background:var(--surface)}
+.topbar,.pressure-tools,.cursor-readout,.cards>div,td,th{border-color:var(--line)}
+.brand-icon{background:#a6ceff;color:#0b1420}.primary{background:#142e4d;border-color:#537ba6}
+.primary>span,.primary footer,.primary small,.primary i{color:#d7e8ff}.primary i{background:#25466b}
+p,nav a,.metric>span,.metric footer,.metric small,.eyebrow,.toolbar label,.chart-hint,
+.cursor-values b,.factor span,.factor small,.event small,.coverage-grid small,.cards small,
+th,td small,.pressure-heading time,.pressure-values small,.page-footer{color:var(--muted)}
+.factor,.coverage-grid>div,.cards>div,.pill,.metric i,code{background:var(--raised)}
+.metric i,.pill{color:#c0d9ff}.secondary,.cursor-readout{background:#131f30}
+.cursor-readout time,code{color:#aed4ff}.factor .bar{background:#344760}.factor .bar>i{background:#ffb454}
+.damage-grid .bar>i{background:#c5a0ff}.event .event-score{color:#ffb454}
+.linked-cursor{border-color:#b1d6ff}.cursor-date-tag{background:#d6e8ff;color:#0b1420;box-shadow:0 3px 12px #0008}
+.cursor-dot{background:#ff5366;border-color:#fff;box-shadow:0 0 0 1px #ff8999}
+.pressure-chip.short{color:#ffb454}.pressure-chip.long{color:#c5a0ff}.pressure-chip.combined{color:#79b8ff}
+.pressure-chip.not-plotted{opacity:1;color:#92a5bf}.heat-main,#heat-factor-date{color:#ff83bb}
+.rps-selected-line,.rps-tools .rps-main{color:#ff7f8a}.rps-candidate-line{color:#b4c4d8}
+.rps-ma5-line{color:#ffd166}.rps-ma20-line{color:#55dbea}
+.rps-risk{background:#25374d;color:#d0dfef}.rps-risk[data-state=high]{background:#4b202b;border-color:#da7184;color:#ffd3d9}
+.rps-risk[data-state=incomplete],.rps-risk[data-state=missing]{background:#43341b;color:#ffe2a1}
+*{scrollbar-color:#586d88 #101925}::selection{background:#476e9c;color:#fff}
